@@ -1,11 +1,32 @@
 import { Box, Button, TextField, Typography } from '@mui/material'
+import axios from 'axios'
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import { Form, useNavigate } from 'react-router-dom'
+import { loginUser } from './reduxwork/UserSlice'
 
 const Login = () => {
 
   let navigator = useNavigate()
+  let dispatcher = useDispatch()
 
+  let doLogin = async (e) => {
+    e.preventDefault()
+    let formData = new FormData(e.target)
+    let loginData = Object.fromEntries(formData.entries())
+
+    try {
+      let result = await axios.post('http://localhost:5000/api/dologin', loginData)
+      console.log("DATA", result.data.data);
+      dispatcher(loginUser(result.data.data))
+      // alert("Login successful")
+      navigator('/')
+
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
   return (
     <>
       <Box sx={{
@@ -17,6 +38,7 @@ const Login = () => {
         backgroundColor: '#f4f6f8',
       }}>
         <Box
+          onSubmit={doLogin}
           component='form'
           sx={{
             width: 400,
@@ -51,18 +73,20 @@ const Login = () => {
             variant='outlined'
             fullWidth />
 
-          <Button variant='contained' color='success' sx={{     
-            width: '100%',  
-            bgcolor: 'primary', // blue
-            py: 1.2,
-            fontWeight: 'bold',
-            letterSpacing: 1,
-            fontSize: '1rem',
-            '&:hover': {
-              bgcolor: 'darkgreen',
-            },
-            boxShadow: 2,
-          }}
+          <Button
+            type='submit'
+            variant='contained' color='success' sx={{
+              width: '100%',
+              bgcolor: 'primary', // blue
+              py: 1.2,
+              fontWeight: 'bold',
+              letterSpacing: 1,
+              fontSize: '1rem',
+              '&:hover': {
+                bgcolor: 'darkgreen',
+              },
+              boxShadow: 2,
+            }}
           >Login</Button>
 
           <Typography variant='body2' onClick={() => {
