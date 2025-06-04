@@ -8,11 +8,12 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ChromeReaderModeIcon from '@mui/icons-material/ChromeReaderMode';
 import PortraitIcon from '@mui/icons-material/Portrait';
 import LoginIcon from '@mui/icons-material/Login';
+import { useSelector } from 'react-redux';
 
 const MyAppBar = () => {
 
     let navigator = useNavigate()
-
+    let { isLogin } = useSelector((state) => state.user)
     return (
         <>
             <Box>
@@ -21,11 +22,11 @@ const MyAppBar = () => {
                         <IconButton>
                             <MenuIcon sx={{
                                 color: '#fff',
-                                
+
                             }} />
                         </IconButton>
 
-                        <Typography variant='h4' sx={{mr:6, ml:3}}>FoodKart</Typography>
+                        <Typography variant='h4' sx={{ mr: 6, ml: 3 }}>FoodKart</Typography>
 
                         <List sx={{
                             display: "flex"
@@ -56,15 +57,19 @@ const MyAppBar = () => {
                                 <ListItemText>Dishes</ListItemText>
                             </ListItem>
 
-                            <ListItem onClick={() => {
-                                navigator("/cart")
-                            }}>
-                                <ListItemIcon sx={{ minWidth: 34, color: "#fff" }}>
-                                    <ShoppingCartIcon />
-                                </ListItemIcon>
-                                <ListItemText>Cart</ListItemText>
-                            </ListItem>
+                            {
+                                isLogin && (
+                                    <ListItem onClick={() => {
+                                        navigator("/cart")
+                                    }}>
+                                        <ListItemIcon sx={{ minWidth: 34, color: "#fff" }}>
+                                            <ShoppingCartIcon />
+                                        </ListItemIcon>
+                                        <ListItemText>Cart</ListItemText>
+                                    </ListItem>
 
+                                )
+                            }
                             <ListItem onClick={() => {
                                 navigator("/order")
                             }}>
